@@ -38,11 +38,11 @@ $(function(){
     // id=q5の前にテキストを挿入
     $(this).before("DOMの前")
     // id=q5の後ろにテキストを挿入
-    $(this).after("DOMの後")
+    .after("DOMの後")
     // id=q5の要素の中の一番始めにテキストを挿入
-    $(this).prepend("DOMの中の前")
+    .prepend("DOMの中の前")
     // id=q5の要素の中の一番後ろにテキストを挿入
-    $(this).append("DOMの中の後")
+    .append("DOMの中の後")
   });
 });
 
@@ -52,8 +52,8 @@ $(function(){
   $("#q6").on("click", function(){
     // アニメーションをつける
     $(this).animate({
-      marginTop: 100,
-      marginLeft: 100
+      "marginTop": "100",
+      "marginLeft": "100"
       // 2秒かけて動く
     }, 2000)
   });
@@ -64,23 +64,24 @@ $(function(){
   // id=q7をクリックした時に
   $("#q7").on("click", function(){
     //id=q7を要素ごとコンソールへ出力する
-    console.log(q7);
+    console.log(this);
   });
 });
 
 // Q1-8
 $(function(){
-  $("#q8")
-   // id=q8にホバーした時に
-    .on("mouseenter", function(){
-      // id=q8にをlargeスタイルを追加しサイズ変更する
-      $(this).addClass("large");
-    })
+  $("#q8").on({
+    // id=q8にホバーした時に
+    mouseenter: function(){
+      // id=q8にlargeスタイルを追加しサイズ変更する
+      $(this).addClass("large")
+    },
     // id=q8からカーソルを離した時に
-    .on("mouseleave", function(){
+    mouseleave: function(){
       // largeのcssスタイルを取り除く
-      $(this).removeClass("large");
-    });
+      $(this).removeClass("large")
+    }
+  })
 });
 
 // Q1-9
