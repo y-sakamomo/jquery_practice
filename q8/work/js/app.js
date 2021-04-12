@@ -2,7 +2,7 @@ $(function () {
   // 入力した内容をsearchWordに代入
   const searchWord = $("#search-input").val();
   // pageCountの初期値をを１にする
-  var pageCount = 1;
+  let pageCount = 1;
   // // タイトル
   // items.title
   // // 作者
@@ -20,20 +20,20 @@ $(function () {
   //   }
   // }
   // エラーメッセージを表示させる処理
-  // function displayError() {
-  //   // .listsクラスを空にする
-  //   $(".lists").empty();
-  //   // エラーメッセージを.listsクラスの直前に追加する
-  //   $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>')
-  // }
+  function displayError() {
+    // .listsクラスを空にする
+    $(".lists").empty();
+    // エラーメッセージを.listsクラスの直前に追加する
+    $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>')
+  }
   // .search-btnをクリックした時、
-  // $(".search-btn").on("click", function () {
-  //   // 検索ワードが同じ場合、pageCountを+1にする。同じでない場合、pageCountのを１し、.listsを空にする。
-  //   if (searchWord === searchWord) {
-  //     pageCount++;
-  //   } else {
-  //     pageCount = 1, $(".lists").empty();
-  //   }
+  $(".search-btn").on("click", function () {
+    // 検索ワードが同じ場合、pageCountを+1にする。同じでない場合、pageCountのを１し、.listsを空にする。
+    if (searchWord === searchWord) {
+      pageCount++;
+    } else {
+      pageCount = 1, $(".lists").empty();
+    }
     // 変数settingsに設定情報などを格納
     const settings = {
       // 実行するURL。
@@ -53,14 +53,14 @@ $(function () {
     })
     console.log(['@graph']);
     console.log(['@graph.items.title']);
-  // });
+  });
   // リセットボタンの機能実装
-  // $(".reset-btn").on("click", function () {
-  //   // .messageクラスを取り除く
-  //   $(".message").remove();
-  //   // .listsクラスを空にする
-  //   $(".lists").empty();
-  //   // 検索ワードに入力された内容を空にする
-  //   $("#search-input").val("");
-  // })
+  $(".reset-btn").on("click", function () {
+    // .messageクラスを取り除く
+    $(".message").remove();
+    // .listsクラスを空にする
+    $(".lists").empty();
+    // 検索ワードに入力された内容を空にする
+    $("#search-input").val("");
+  })
 });
