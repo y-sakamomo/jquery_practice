@@ -44,6 +44,9 @@ $(function () {
       $(".message").remove();
       // resultの中のitems配列の中身を個別に取り出し処理を指定する
       $.each(r[0].items, function (index) {
+        if (r[0].items[index]["dc:creator"] == undefined) {
+          r[0].items[index]["dc:creator"] = "作者不明";
+        }
         // 部分一致したものを.listsクラスに追加し表示する
         $(".lists").prepend(`<li class="lists-item"><div class="list-inner"><p>タイトル：${r[0].items[index].title}</p><p>作者：${r[0].items[index]["dc:creator"]}</p><p>出版社：${r[0].items[index]["dc:publisher"]}</p><a href="${r[0].items[index]["@id"]}">書籍情報</a></div></li>`)
       })
@@ -53,7 +56,10 @@ $(function () {
       // .listsクラスを空にする
       $(".lists").empty();
       // エラーメッセージを.listsクラスの直前に追加する
-      $(".lists").before('<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>')
+      const errorMessage = `<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>`
+      if(!$(".inner").hasClass("message")) {
+        $(".lists").before(errorMessage)
+      }
     }
   });
   // リセットボタンの機能実装
