@@ -44,6 +44,7 @@ $(function () {
       $(".message").remove();
       // resultの中のitems配列の中身を個別に取り出し処理を指定する
       $.each(r[0].items, function (index) {
+        // 作者の値がundefinedだった時、作者不明と表示させる
         if (r[0].items[index]["dc:creator"] == undefined) {
           r[0].items[index]["dc:creator"] = "作者不明";
         }
@@ -55,11 +56,11 @@ $(function () {
     function displayError() {
       // .listsクラスを空にする
       $(".lists").empty();
+      // .messageクラスを取り除く
+      $(".message").remove();
       // エラーメッセージを.listsクラスの直前に追加する
       const errorMessage = `<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>`
-      if(!$(".inner").hasClass("message")) {
-        $(".lists").before(errorMessage)
-      }
+      $(".lists").before(errorMessage)
     }
   });
   // リセットボタンの機能実装
