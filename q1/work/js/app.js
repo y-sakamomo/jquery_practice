@@ -52,8 +52,8 @@ $(function(){
   $("#q6").on("click", function(){
     // アニメーションをつける
     $(this).animate({
-      "margin-top": "100",
-      "margin-left": "100"
+      "margin-top": 100,
+      "margin-left": 100
       // 2秒かけて動く
     }, 2000)
   });
