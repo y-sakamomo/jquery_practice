@@ -1,22 +1,20 @@
 $(function () {
   // pageCountの初期値をを1にする
   let pageCount = 1;
-  // searchWordの値を格納するための箱
-  let searchResult = [];
+  // 一つ前に検索した値を格納する。searchWordの値代入するが、始めは一旦空文字を代入
+  let lastSearch = "";
   // .search-btnをクリックした時、
   $(".search-btn").on("click", function () {
     // 入力した内容をsearchWordに代入
     const searchWord = $("#search-input").val();
-    let lastSearch = searchResult[searchResult.length-1];
-    // 検索ワードがsearchResult(検索ワードの配列)の最後の値と同じ場合は、pageCountに+1する。そうでない以外の場合は1に戻し.listsを空にする。
-    if(searchWord === lastSearch) {
+    // 検索ワードがlastSearch(一つ前に検索したの値）と同じ場合は、pageCountに+1する。そうでない場合は1に戻し.listsを空し、lastSearchに検索した値を代入する。
+    if(lastSearch === searchWord) {
       pageCount++;
     } else {
       pageCount = 1;
       $(".lists").empty()
+      lastSearch = searchWord;
     }
-    // searchWordの値を格納する
-    searchResult.push(searchWord)
     // 変数settingsに設定情報などを格納
     const settings = {
       // 実行するURL。
@@ -29,10 +27,12 @@ $(function () {
       const result = response['@graph'];
       // displayResultの実行
       displayResult(result)
+      console.log(result);
       // データがダウンロードできなかったときの処理
     }).fail(function (err) {
       // displayErrorの実行
       displayError(err)
+      console.log(err.status);
     })
   });
   // .listsクラスに該当の書籍一覧を表示させる処理
@@ -57,9 +57,12 @@ $(function () {
     $(".message").remove();
     // エラーメッセージを定義し代入する
     const errorMessage = `<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>`;
+    const errorSearch = `<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>`;
     // ステイタスコードが０の時、エラーメッセージを.listsクラスの直前に追加する
-    if(e.status === 0) {
+    if(e.status === 400) {
       $(".lists").before(errorMessage)
+    } else if (e.status === 0) {
+      $(".lists").before(errorSearch)
     }
   }
   // リセットボタンの機能実装
@@ -70,7 +73,7 @@ $(function () {
     $(".lists").empty();
     // 検索ワードに入力された内容を空にする
     $("#search-input").val("");
-    // pageCountを0に戻す
-    pageCount = 0;
+    // pageCountを1に戻す
+    pageCount = 1;
   })
 });
