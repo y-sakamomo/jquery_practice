@@ -27,27 +27,32 @@ $(function () {
       const result = response['@graph'];
       // displayResultの実行
       displayResult(result)
-      console.log(result);
       // データがダウンロードできなかったときの処理
     }).fail(function (err) {
       // displayErrorの実行
       displayError(err)
-      console.log(err.status);
     })
   });
   // .listsクラスに該当の書籍一覧を表示させる処理
   function displayResult(r) {
     // .messageクラスを取り除く
     $(".message").remove();
-    // resultの中のitems配列の中身を個別に取り出し処理を指定する
-    $.each(r[0].items, function (index) {
-      // 作者の値がundefinedだった時、作者不明と表示させる
-      if (r[0].items[index]["dc:creator"] == undefined) {
-        r[0].items[index]["dc:creator"] = "作者不明";
-      }
-      // 部分一致したものを.listsクラスに追加し表示する
-      $(".lists").prepend(`<li class="lists-item"><div class="list-inner"><p>タイトル：${r[0].items[index].title}</p><p>作者：${r[0].items[index]["dc:creator"]}</p><p>出版社：${r[0].items[index]["dc:publisher"]}</p><a href="${r[0].items[index]["@id"]}">書籍情報</a></div></li>`)
-    })
+    // 検索結果がない場合のエラーを定義
+    const noResult = `<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>`;
+    // r = r[0].itemsがnullだったらエラーメッセージを出す。nullじゃなければ、個別の処理を指定する。
+    if(r[0].items == null) {
+      $(".lists").before(noResult)
+    } else {
+      // resultの中のitems配列の中身を個別に取り出し処理を指定する
+      $.each(r[0].items, function (index) {
+        // 作者の値がundefinedだった時、作者不明と表示させる
+        if (r[0].items[index]["dc:creator"] == undefined) {
+          r[0].items[index]["dc:creator"] = "作者不明";
+        }
+        // 部分一致したものを.listsクラスに追加し表示する
+        $(".lists").prepend(`<li class="lists-item"><div class="list-inner"><p>タイトル：${r[0].items[index].title}</p><p>作者：${r[0].items[index]["dc:creator"]}</p><p>出版社：${r[0].items[index]["dc:publisher"]}</p><a href="${r[0].items[index]["@id"]}">書籍情報</a></div></li>`)
+      })
+    }
   }
   // エラーメッセージを表示させる処理
   function displayError(e) {
@@ -56,13 +61,17 @@ $(function () {
     // .messageクラスを取り除く
     $(".message").remove();
     // エラーメッセージを定義し代入する
-    const errorMessage = `<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>`;
-    const errorSearch = `<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>`;
-    // ステイタスコードが０の時、エラーメッセージを.listsクラスの直前に追加する
-    if(e.status === 400) {
+    const errorConnect = `<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>`;
+    const errorText = `<div class="message">検索キーワードが有効ではありません。<br>1文字以上で検索して下さい。</div>`;
+    const errorMessage = `<div class="message">予期せぬエラーが起きました。<br>再読み込みを行ってください。</div>`;
+    // ステイタスコードが0の時（接続が出来ていない）はerrorConnectを.listsクラスの直前に追加する。それ以外はerrorMessageを追加する。
+    if(e.status === 0) {
+      $(".lists").before(errorConnect)
+    // ステイタスコードが400の時（クライアント側のエラー）はerrorTextを追加。
+    } else if (e.status === 400) {
+      $(".lists").before(errorText)
+    } else {
       $(".lists").before(errorMessage)
-    } else if (e.status === 0) {
-      $(".lists").before(errorSearch)
     }
   }
   // リセットボタンの機能実装
