@@ -56,7 +56,7 @@ $(function () {
         } else if (creator == undefined) {
           creator = "作者不明";
         } else if (publisher == undefined) {
-          creator = "出版社不明";
+          publisher = "出版社不明";
         }
         // リストとして表示させるHTMLを定義
         let listText = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${creator}</p><p>出版社：${publisher}</p><a href="${id}">書籍情報</a></div></li>`;
