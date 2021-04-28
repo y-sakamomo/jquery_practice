@@ -37,20 +37,21 @@ $(function () {
   function displayResult(r) {
     // .messageクラスを取り除く
     $(".message").remove();
-    // 検索結果がない場合のエラーを定義
-    const noResult = `<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>`;
-    // r = r[0].itemsがnullだったらエラーメッセージを出す。nullじゃなく配列に中身が入っていれば、個別の処理を指定する。
-    if(r[0].items == null) {
+    // r = r[0].itemsがundefined、または配列に中身が入っていなければエラーメッセージを出す。それ以外は個別の処理を指定する。
+    if(r[0].items == undefined || r[0].items.length < 0) {
+      // エラーメッセージを定義
+      const noResult = `<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>`;
+      // listsクラスの直前に追加する。
       $(".lists").before(noResult)
-    } else if(r.length > 0) {
+    } else {
       // resultの中のitems配列の中身を個別に取り出し処理を指定する
       $.each(r[0].items, function (index) {
-        // 配列の値をそれぞれ定義
+        // 配列の中の値をそれぞれ定義
         let title = r[0].items[index].title;
         let creator = r[0].items[index]["dc:creator"];
         let publisher = r[0].items[index]["dc:publisher"];
         let id = r[0].items[index]["@id"];
-        // 作者の値がundefinedだった時、作者不明と表示させる
+        // 値がundefinedだった時、それぞれ不明と表示させる
         if (title == undefined) {
           title = "タイトル不明";
         } else if (creator == undefined) {
@@ -58,7 +59,7 @@ $(function () {
         } else if (publisher == undefined) {
           publisher = "出版社不明";
         }
-        // リストとして表示させるHTMLを定義
+        // リストの一覧として表示させるHTML要素を定義
         let listText = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${creator}</p><p>出版社：${publisher}</p><a href="${id}">書籍情報</a></div></li>`;
         // 部分一致したものを.listsクラスに追加し表示する
         $(".lists").prepend(listText)
