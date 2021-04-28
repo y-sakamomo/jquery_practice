@@ -51,7 +51,7 @@ $(function () {
         }
         // 部分一致したものを.listsクラスに追加し表示する
         $(".lists").prepend(`<li class="lists-item"><div class="list-inner"><p>タイトル：${r[0].items[index].title}</p><p>作者：${r[0].items[index]["dc:creator"]}</p><p>出版社：${r[0].items[index]["dc:publisher"]}</p><a href="${r[0].items[index]["@id"]}">書籍情報</a></div></li>`)
-      })
+      });
     }
   }
   // エラーメッセージを表示させる処理
@@ -64,12 +64,13 @@ $(function () {
     const errorConnect = `<div class="message">正常に通信できませんでした。<br>インターネットの接続の確認をしてください。</div>`;
     const errorText = `<div class="message">検索キーワードが有効ではありません。<br>1文字以上で検索して下さい。</div>`;
     const errorMessage = `<div class="message">予期せぬエラーが起きました。<br>再読み込みを行ってください。</div>`;
-    // ステイタスコードが0の時（接続が出来ていない）はerrorConnectを.listsクラスの直前に追加する。それ以外はerrorMessageを追加する。
+    // ステイタスコードが0の時（接続が出来ていない）はerrorConnectを.listsクラスの直前に追加する。
     if(e.status === 0) {
       $(".lists").before(errorConnect)
     // ステイタスコードが400の時（クライアント側のエラー）はerrorTextを追加。
     } else if (e.status === 400) {
       $(".lists").before(errorText)
+    // それ以外はerrorMessageを追加する。
     } else {
       $(".lists").before(errorMessage)
     }
