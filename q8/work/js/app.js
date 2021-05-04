@@ -38,7 +38,7 @@ $(function () {
     // .messageクラスを取り除く
     $(".message").remove();
     // r = r[0].itemsがundefined、または配列に中身が入っていなければエラーメッセージを出す。それ以外は個別の処理を指定する。
-    if(r[0].items == undefined || r[0].items.length < 0) {
+    if(r[0].items == undefined || r[0].items.length == 0) {
       // エラーメッセージを定義
       const noResult = `<div class="message">検索結果が見つかりませんでした。<br>別のキーワードで検索して下さい。</div>`;
       // listsクラスの直前に追加する。
@@ -52,13 +52,9 @@ $(function () {
         let publisher = r[0].items[index]["dc:publisher"];
         let id = r[0].items[index]["@id"];
         // 値がundefinedだった時、それぞれ不明と表示させる
-        if (title == undefined) {
-          title = "タイトル不明";
-        } else if (creator == undefined) {
-          creator = "作者不明";
-        } else if (publisher == undefined) {
-          publisher = "出版社不明";
-        }
+        title == undefined ? title = "タイトル不明" : title;
+        creator == undefined ? creator = "作者不明" : creator;
+        publisher == undefined ? publisher = "出版社不明" : publisher;
         // リストの一覧として表示させるHTML要素を定義
         let listText = `<li class="lists-item"><div class="list-inner"><p>タイトル：${title}</p><p>作者：${creator}</p><p>出版社：${publisher}</p><a href="${id}">書籍情報</a></div></li>`;
         // 部分一致したものを.listsクラスに追加し表示する
